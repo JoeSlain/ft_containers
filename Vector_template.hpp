@@ -57,28 +57,80 @@ class vector {
 
 		friend class vector;
 	};
+
+	class const_iterator : public RandIterator<value_type> {
+	protected:
+	typedef RandIterator<value_type> base;
+	const_iterator(value_type *src) : RandIterator<value_type>(src) {};
+	private:
+	const_iterator(const RandIterator<value_type> &src) : RandIterator<value_type>(src) {};
+
+	public:
+	const_iterator(void) : RandIterator<value_type>() {};
+	const_iterator(const const_iterator &src) : RandIterator<value_type>(src) {};
+
+	typedef value_type&			reference;
+	typedef value_type*			pointer;
+
+	reference			operator*(void) const;
+	pointer				operator->(void) const;
+	const_iterator			&operator+=(difference_type n);
+	const_iterator			&operator-=(difference_type n);
+	reference			operator[](difference_type n) const;
+
+	difference_type		operator-(const RandIterator<value_type> &n) const { return base::operator-(n); };
+	const_iterator			operator-(difference_type n) const { return base::operator-(n); };
+	const_iterator			operator+(difference_type n) const { return base::operator+(n); };
+	friend const_iterator		operator+(difference_type n, const const_iterator &rhs) { return rhs.operator+(n); };
+
+	const_iterator			&operator++(void) { base::operator++(); return *this; };
+	const_iterator			operator++(int) { return base::operator++(0); };
+	const_iterator			&operator--(void) { base::operator--(); return *this; };
+	const_iterator			operator--(int) { return base::operator--(0); };
+
+	friend class vector;
+	};
 	
-	/*typedef						 					iterator;
-	typedef						 					const_iterator; 
 	typedef std::reverse_iterator<iterator> 		reverse_iterator;
-	typedef std::reverse_iterator<const_iterator> 	const_reverse_iterator;*/ //must implement
+	typedef std::reverse_iterator<const_iterator> 	const_reverse_iterator;
 
 	/*--------------
 		CONSTRUCTORS
 	--------------*/
-	explicit vector(const Allocator& = Allocator());
+	explicit vector(const allocator_type &Alloc = allocator_type());
 
-	explicit vector(size_type n, const T& value = T(),
-	const Allocator& = Allocator());
-	template <class InputIterator>
-	vector(InputIterator first, InputIterator last,
-	const Allocator& = Allocator());
+	explicit vector(size_type n, const value_type& value = T(), const allocator_type& Alloc= allocator_type());
+	template <class iterator>
+	vector(iterator first, iterator last, const allocator_type& Alloc = allocator_type())
+	{
+		difference_type diff = last - first;
+		int i = 0;
+		this->_capacity = static_cast<size_type>(diff);
+		this->_size = static_cast<size_type>(diff);
+		this->_alloc = Alloc;
+		this->_data = this->_alloc.allocate(this->_capacity);
+		while (first < last)
+		{
+			this->_alloc.construct(&this->_data[i++], *first);
+			first++;
+		}
+	}
 	vector(const vector<T,Allocator>& x);
 	~vector();
 	vector<T,Allocator>& operator=(const vector<T,Allocator>& x);
 
 	template <class InputIterator>
-	void assign(InputIterator first, InputIterator last);
+	void assign(InputIterator first, InputIterator last)
+	{
+		int i = 0;
+		this->clear();
+		difference_type s = last - first;
+		if (s > this->_capacity)
+			this->reserve(s);
+		while (first != last)
+			this->_alloc.construct(&this->_data[i++], *first++);
+		this->_size = s;
+	}
 	void assign(size_type n, const T& u);
 
 	allocator_type get_allocator() const;
@@ -86,6 +138,7 @@ class vector {
 	/*--------------
 		ITERATORS
 	--------------*/
+	
 	iterator begin();
 
 	const_iterator begin() const;
@@ -101,7 +154,7 @@ class vector {
 	reverse_iterator rend();
 
 	const_reverse_iterator rend() const;
-
+	
 	/*--------------
 		CAPACITY
 	--------------*/
@@ -140,11 +193,7 @@ class vector {
 	/*--------------
 		MODIFIERS
 	--------------*/
-	void push_back(const T& x)
-	{
-		if (this->_size == this->capacity)
-			
-	}
+	void push_back(const T& x);
 
 	void pop_back();
 
@@ -154,7 +203,24 @@ class vector {
 
 	template <class InputIterator>
 	void insert(iterator position,
-	InputIterator first, InputIterator last);
+	InputIterator first, InputIterator last)
+	{
+		T *newArray = this->_alloc.allocate(this->_size + (last - first));
+		int i = 0;
+		int tmp = this->_size + (last - first);
+		iterator it = this->begin();
+		iterator end = this->end();
+		while (it != position)
+			newArray[i++] = *it++;
+		while (first != last)
+			newArray[i++] = *first++;
+		while (it != end)
+			newArray[i++] = *it++;
+		this->destroy();
+		this->_data = newArray;
+		this->_capacity = tmp;
+		this->_size = tmp;
+	}
 	iterator erase(iterator position);
 
 	iterator erase(iterator first, iterator last);
@@ -168,6 +234,9 @@ class vector {
 	size_type	_size;	// the actual occupied space in array
 	size_type	_capacity; //total space aivalable in array
 	allocator_type _alloc; //allocator
+
+	void destroy();
+	void create(size_type n, value_type value);
 };//---------------------------------------- END OF VECTOR CLASS 
 
 template <class T, class Allocator>

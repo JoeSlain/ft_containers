@@ -17,7 +17,7 @@ namespace ft{
 	template<typename T>
 	RandIterator<T>	& RandIterator<T>::operator=(RandIterator const &rhs)
 	{
-		if (this = &rhs)
+		if (this == &rhs)
 			return (*this);
 		this->_ptr = rhs._ptr;
 		return (*this);

@@ -27,7 +27,7 @@ namespace ft{
 			RandIterator<T>	&operator--(void);
 			RandIterator<T>	operator--(int);
 
-			difference_type				operator-(const RandIterator &rhs) const;
+			difference_type			operator-(const RandIterator &rhs) const;
 			RandIterator<T>			operator+(difference_type n) const;
 			RandIterator<T>			operator-(difference_type n) const;
 			friend RandIterator<T>	operator+(difference_type n, const RandIterator &rhs)

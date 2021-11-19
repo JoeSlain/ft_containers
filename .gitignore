@@ -3,3 +3,5 @@ a.out
 */*.o
 .vscode
 .history
+container_test/
+*.gch
