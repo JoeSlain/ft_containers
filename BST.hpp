@@ -5,7 +5,6 @@
 
 namespace ft{
 
-
 	template<class T>
 	class Node {
 		typedef T value_type;
@@ -32,6 +31,7 @@ namespace ft{
 		Node *_right;
 		Node *_parent;
 	};
+
 	template < class T,
 		class Compare,
 		class Node = ft::Node<T>,
@@ -56,6 +56,24 @@ namespace ft{
 
 		pointer get_root() const
 		{ return _root; }
+		
+		void deleteTreeHelper(pointer node)
+		{
+			if (node == _null) return;
+			deleteTreeHelper(node->_left);
+			deleteTreeHelper(node->_right);
+			if (node)
+			{
+				delete node;
+				node = NULL;
+			}
+		}
+
+		void deleteTree()
+		{
+			deleteTreeHelper(_root);
+			delete _null;
+		}
 
 		pointer search(const value_type val, pointer root)
 		{
@@ -73,6 +91,8 @@ namespace ft{
 		bool insert(value_type const & key)
 		{
 			pointer node = new node_type(key);
+			node->_right = _null;
+			node->_left = _null;
 			if (!(_root))
 			{
 				_root = node;
@@ -80,13 +100,11 @@ namespace ft{
 			}
 		/*	allocator_type().allocate(1);
 			allocator_type().construct(node, node_type(key));*/
-			node->_right = _null;
-			node->_left = _null;
 
 			pointer current = NULL;
 			pointer tmp_root = this->_root;
 			
-			while (tmp_root != NULL)
+			while (tmp_root != _null)
 			{
 				current = tmp_root;
 				if (_comp(node->_value, tmp_root->_value))
@@ -98,12 +116,6 @@ namespace ft{
 					delete node;
 					return false;
 				}
-				if (current == NULL)
-					_root = node;
-				else if (_comp(node->_value, current->_value))
-					current->_left = node;
-				else
-					current->_right = node;
 			}
 			node->_parent = current;
 			if (current == NULL)
@@ -130,7 +142,8 @@ namespace ft{
 		}
 
 		// Find the inorder successor
-		pointer minValueNode(pointer node) {
+		pointer minValueNode(pointer node)
+		{
 			pointer current = node;
 
 			// Find the leftmost leaf
@@ -140,95 +153,81 @@ namespace ft{
 			return current;
 		}
 
-		// Deleting a node
-/*		pointer deleteNode(pointer root, value_type key) {
-			// Return if the tree is empty
-			if (root == NULL) return root;
 
-			// Find the node to be deleted
-			if (key < root->_value)
-				root->_left = deleteNode(root->_left, key);
-			else if (key > root->_value)
-				root->_right = deleteNode(root->_right, key);
-			else {
-				// If the node is with only one child or no child
-				if (root->_left == _null) {
-					pointer temp = root->_right;
-					free(root);
-					_root = temp;
-					return temp;
-				}
-				else if (root->_right == _null) {
-					pointer temp = root->_left;
-					free(root);
-					_root = temp;
-					return temp;
-				}
-
-				// If the node has two children
-				pointer temp = minValueNode(root->_right);
-
-				// Place the inorder successor in position of the node to be deleted
-				root->_value = temp->_value;
-
-				// Delete the inorder successor
-				root->_right = deleteNode(root->_right, temp->_value);
-			}
-			return root;
-		}
-*/
-
-bool deleteNode(const value_type val)
-{
-	pointer target = NULL;
-	pointer current = _root;
-	if (!(_root))
-		return false;
-	while(current != _null)
-	{
-		if (_comp(current->_value, val))
-			current = current->_right;
-		else if (_comp(val, current->_value))
-			current = current->_left;
-		else
+		/*
+		*** @param toDelete Node to delete
+		*** @param newNode Node to replace deleted node.
+		*** @brief Connects toDelete's parent with newNode.
+		*** If toDelete is root then newNode is the new _root
+		*** 
+		*/
+		void deleteConnector(pointer toDelete, pointer newNode)
 		{
-			target = current;
-			break;
+			if (toDelete->_parent == NULL)
+				_root = newNode;
+			else if (toDelete == toDelete->_parent->_left)
+				toDelete->_parent->_left = newNode;
+			else
+				toDelete->_parent->_right = newNode;
+
+			newNode->_parent = toDelete->_parent;
 		}
-	}
-	if (!(target))
-		return false;
-	pointer parent = target->_parent;
-	if (target->_left == _null)
-	{
-		target->_right->_parent = parent;
 
-	}
-	else if (target->_right == _null)
-	{
-		target->left->_parent = parent;
+		bool deleteNode(const value_type val)
+		{
+			pointer toDelete = NULL;
+			pointer current = _root;
+			pointer	tmp = NULL;
+			if (!(_root))
+				return false;
+			while(current != _null)
+			{
+				if (_comp(current->_value, val))
+					current = current->_right;
+				else if (_comp(val, current->_value))
+					current = current->_left;
+				else
+				{
+					toDelete = current;
+					break;
+				}
+			}
+			if (!(toDelete))
+			return false;
+			if (toDelete->_left == _null) {
+				tmp = toDelete->_right;
+				deleteConnector(toDelete, toDelete->_right);
+			}
+			else if (toDelete->_right == _null) {
+				tmp = toDelete->_left;
+				deleteConnector(toDelete, toDelete->_left);
+			}
+			else {
+				current = minValueNode(toDelete->_right);
+				tmp = current->_right;
+				if (current->_parent == toDelete) {
+					tmp->_parent = current;
+				}
+				else {
+					deleteConnector(current, current->_right);
+					current->_right = toDelete->_right;
+					current->_right->_parent = current;
+					}
 
-	}
-	else
-	{
-		pointer newNode = minValueNode(target->_right);
-		newNode->_parent = target->parent;
-		newNode->_right 
-		
-	}
-	if (target == parent->_right)
-		parent->right = target->_right;
-	else
-		parent->_left = target->_right;
-	delete target;
-}
+					deleteConnector(toDelete, current);
+					current->_left = toDelete->_left;
+					current->_left->_parent = current;
+				}
+				delete toDelete;
+				return true;
+		}
 		
 		private:
 		pointer _root;
 		pointer _null;
 		value_compare _comp;
 
-	};
+	};//end BST
 
 }//end namespace
 #endif

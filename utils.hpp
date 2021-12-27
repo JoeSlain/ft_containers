@@ -9,31 +9,31 @@ namespace ft{
 	template< class Iter >
 	struct iterator_traits
 	{
-		difference_type	Iter::difference_type;
-		value_type	Iter::value_type;
-		pointer	Iter::pointer;
-		reference	Iter::reference;
-		iterator_category	Iter::iterator_category;
+		typedef typename Iter::difference_type difference_type;
+		typedef typename Iter::value_type  value_type;
+		typedef typename Iter::pointer  pointer;
+		typedef typename Iter::reference reference;
+		typedef typename Iter::iterator_category iterator_category;
 
 	};
 	template< class T >
 	struct iterator_traits<T*>
 	{
-		difference_type	std::ptrdiff_t
-		value_type	T
-		pointer	T*
-		reference	T&
-		iterator_category	std::random_access_iterator_tag
+		typedef std::ptrdiff_t difference_type;
+		typedef T value_type;
+		typedef T* pointer;
+		typedef T& reference;
+		typedef std::random_access_iterator_tag iterator_category;
 	};
 
 	template< class T >
 	struct iterator_traits<const T*>
 	{
-		difference_type	std::ptrdiff_t;
-		value_type	T;
-		pointer	const T*;
-		reference	const T&;
-		iterator_category	std::random_access_iterator_tag;
+		typedef std::ptrdiff_t					difference_type;
+		typedef T								value_type;
+		typedef const T*						pointer;
+		typedef const T&						reference;
+		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 		/*---------------
@@ -122,66 +122,108 @@ namespace ft{
 		/*-----------
 			PAIR
 		------------*/
-	template< class T1, class T2 >
-	struct pair
-	{
-		typedef T1 first_type;
-		typedef T2 second_type;
+	template < class T1, class T2 >
+	struct pair {
+	/* member functions */
+	
+		typedef T1	first_type;
+		typedef T2	second_type;
 
-		first_type first;
+	/* member variables */
+	
+		first_type	first;
 		second_type second;
 
-		pair(void) : first(), second() {}
-		pair( const T1& x, const T2& y ) : first(x), second(y) {}
-		template< class U1, class U2 >
-		pair( const pair<U1, U2>& p ) : first(p.first), second(p.second) {};
+	/* member functions */
+	
+	/* constructor / destructor / operator= */
+		
+		/**
+		 * @brief constructor: default
+		 * @note constructs a pair object with its elements value-initialized
+		 */
+		pair(void) :
+			first(),
+			second() {}
+		
+		/**
+		 * @brief constructor: copy
+		 * @note the object is iniialized with the contents of the pr pair object.
+		 * the corresponding member of pr is passed to the constructor of each of its members.
+		 * 
+		 * @param pr: another pair object.
+		 */
+		template< class U, class V >
+		pair(const pair<U, V> & pr) :
+			first(pr.first),
+			second(pr.second) {}
+		
+		/**
+		 * @brief constructor: initialization
+		 * @note member first is constructed with a and member second with b.
+		 * 
+		 * @param a: an object of the type of first, of some other type implicitly convertible to it.
+		 * @param b: an object of the type of second, of some other type implicitly convertible to it.
+		 */
+		pair(const first_type & a, const second_type & b) :
+			first(a),
+			second(b) {}
 
-		pair& operator=( const pair& other )
-		{
-			this->first = other.first;
-			this->second = other.second;
+		/**
+		 * @brief assign contents
+		 * @note assigns pr as the new content for the pair object.
+		 * 
+		 * @param pr: another par object.
+		 * @return *this
+		 */
+		// implicitly declared:
+		pair& operator= (const pair & pr) {
+			if (this == &pr) return *this;
+
+			first = pr.first;
+			second = pr.second;
 			return *this;
 		}
-
-		template< class T1, class T2 >
-		bool operator==( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			return (lhs.first == rhs.firsst && lhs.second == rhs.second);
-		}
-		template< class T1, class T2 >
-		bool operator!=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			return (lhs.first != rhs.first || lhs.second != rhs.second);
-		}
-		template< class T1, class T2 >
-		bool operator<( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			if (lhs.first<rhs.first)
-				return true;
-			if (rhs.first<lhs.first)
-				return false; 
-			if (lhs.second<rhs.second)
-				return true; 
-			return false;
-		}
-
-		template< class T1, class T2 >
-		bool operator<=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			return (!(rhs < lhs));
-		}
-
-		template< class T1, class T2 >
-		bool operator>( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			return (rhs < lhs);
-		}
-		template< class T1, class T2 >
-		bool operator>=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
-		{
-			return (!(lhs < rhs));
-		}
 	};
+	
+	/* non-member function: pair */
+
+	/**
+	 * @brief relational operators for pair
+	 * @note performs the appropriate comparison operation between the pair objects lhs and rhs.
+	 * 
+	 * @param lhs, rhs: pair object, having both the same template parameters (T1 and T2).
+	 */
+	template < class T1, class T2 >
+	bool operator== (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return lhs.first == rhs.first && lhs.second == rhs.second;
+	}
+
+	template < class T1, class T2 >
+	bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return !(lhs == rhs);
+	}
+
+	template < class T1, class T2 >
+	bool operator<  (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
+	}
+
+	template < class T1, class T2 >
+	bool operator<= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return !(rhs < lhs);
+	}
+
+	template < class T1, class T2 >
+	bool operator>  (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return rhs < lhs;
+	}
+
+	template < class T1, class T2 >
+	bool operator>= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
+		return !(lhs < rhs);
+	}
+
 
 	template< class T1, class T2 >
 	pair<T1,T2> make_pair( T1 t, T2 u )
