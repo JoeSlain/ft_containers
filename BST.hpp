@@ -1,4 +1,4 @@
-#ifndef BST_HPP
+/*#ifndef BST_HPP
 #define BST_HPP
 
 #include <memory>
@@ -98,8 +98,8 @@ namespace ft{
 				_root = node;
 				return true;
 			}
-		/*	allocator_type().allocate(1);
-			allocator_type().construct(node, node_type(key));*/
+			allocator_type().allocate(1);
+			allocator_type().construct(node, node_type(key));
 
 			pointer current = NULL;
 			pointer tmp_root = this->_root;
@@ -154,13 +154,13 @@ namespace ft{
 		}
 
 
-		/*
+		*
 		*** @param toDelete Node to delete
 		*** @param newNode Node to replace deleted node.
 		*** @brief Connects toDelete's parent with newNode.
 		*** If toDelete is root then newNode is the new _root
 		*** 
-		*/
+		*
 		void deleteConnector(pointer toDelete, pointer newNode)
 		{
 			if (toDelete->_parent == NULL)
@@ -230,4 +230,4 @@ namespace ft{
 	};//end BST
 
 }//end namespace
-#endif
+#endif*/

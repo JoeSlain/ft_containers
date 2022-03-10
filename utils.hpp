@@ -119,9 +119,9 @@ namespace ft{
 		return (first1 == last1) && (first2 != last2);
 	}
 
-		/*-----------
-			PAIR
-		------------*/
+	/*-----------
+		PAIR
+	------------*/
 	template < class T1, class T2 >
 	struct pair {
 	/* member functions */
@@ -231,6 +231,9 @@ namespace ft{
 		return (pair<T1, T2>(t, u));
 	}
 
+	/*------------
+		NULLPTR
+	-------------*/
 	struct nullptr_t
 	{
 		template <typename T>

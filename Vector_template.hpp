@@ -232,7 +232,7 @@ class vector {
 	private:
 	value_type	*_data; //the array
 	size_type	_size;	// the actual occupied space in array
-	size_type	_capacity; //total space aivalable in array
+	size_type	_capacity; //total space available in array
 	allocator_type _alloc; //allocator
 
 	void destroy();

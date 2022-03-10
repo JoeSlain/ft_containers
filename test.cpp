@@ -1,10 +1,46 @@
 #include <iostream>
 #include <utility>
 #include "Vector.hpp"
-#include <map>
-#include "BST.hpp"
-#include "Map.hpp"
+//#include <map>
+#include "RBT.hpp"
+//#include "Map.hpp"
 
+using namespace std;
+
+
+int main() {
+  ft::RedBlackTree bst;
+  bst.insert(55);
+  bst.insert(40);
+  bst.insert(65);
+  bst.insert(60);
+  bst.insert(75);
+  bst.insert(57);
+
+  bst.printTree();
+  cout << endl
+     << "After deleting" << endl;
+  bst.deleteNode(40);
+  bst.printTree();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 int main()
 {
 	std::map<int, int> test;
@@ -24,7 +60,7 @@ int main()
 
 
 }
-
+*/
 
 /*
 ft::BST<int, std::less<int>> test;
