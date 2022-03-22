@@ -15,10 +15,9 @@ namespace ft {
 		BLACK = true
 	} t_color;
 
-////////////////////////////////////////////////////////////////////////////////
-// rb_node class
-////////////////////////////////////////////////////////////////////////////////
-
+	/*-----------
+		NODE
+	-----------*/
 	template <typename T>
 	struct rb_node {
 
@@ -52,9 +51,9 @@ namespace ft {
 		}
 	};
 
-////////////////////////////////////////////////////////////////////////////////
-// rb_tree_iterator class
-////////////////////////////////////////////////////////////////////////////////
+	/*-------------
+		ITERATOR
+	-------------*/
 
 	template <typename T, typename Node>
 	class rb_tree_iterator {
@@ -104,8 +103,6 @@ namespace ft {
 				return (rb_tree_iterator<value_type const, Node>(this->current, this->_root, this->_nil));
 			}
 
-// forward iterator requirements
-
 			rb_tree_iterator	&operator++(void) {
 				this->current = this->_next(this->current);
 				return (*this);
@@ -141,7 +138,9 @@ namespace ft {
 				return (this->current != rhs.current);
 			}
 
-// bidirectional iterator requirements
+	/*-------------------
+		BIDIRECTIONNAL
+	-------------------*/
 
 			rb_tree_iterator	&operator--(void) {
 				if (this->current == this->_nil)
@@ -160,7 +159,9 @@ namespace ft {
 				return (tmp);
 			}
 
-// utils
+	/*-----------
+		UTILS
+	-----------*/
 
 		private:
 			node_ptr	_max(node_ptr node) {
@@ -200,9 +201,9 @@ namespace ft {
 			}
 	};
 
-////////////////////////////////////////////////////////////////////////////////
-// red-black tree structure
-////////////////////////////////////////////////////////////////////////////////
+	/*----------
+		RBT
+	----------*/
 
 	template <typename T, typename Allocator, typename Compare = std::less<T> >
 	class rb_tree {
@@ -258,7 +259,9 @@ namespace ft {
 				return (*this);
 			}
 
-// iterators
+	/*--------------
+		ITERATORS
+	--------------*/
 
 			iterator	begin(void) {
 				return (iterator(this->min(), this->_root, this->_nil));
@@ -292,8 +295,9 @@ namespace ft {
 				return (const_reverse_iterator(this->begin()));
 			}
 
-// capacity
-
+	/*--------------
+		CAPACITY
+	--------------*/
 			size_type	size(void) const {
 				return (this->_size);
 			}
@@ -302,7 +306,9 @@ namespace ft {
 				return (this->_alloc.max_size());
 			}
 
-// modifiers
+	/*-------------
+		MODIFIERS
+	-------------*/
 
 			node_ptr	max(void) const {
 				return (this->_max(this->_root));
@@ -414,7 +420,9 @@ namespace ft {
 				this->_size = 0;
 			}
 
-// tree operations
+	/*--------------
+		OPERATIONS
+	--------------*/
 
 			iterator	find(value_type const &key) {
 				node_ptr node = this->_search(key);
@@ -465,7 +473,9 @@ namespace ft {
 
 		private:
 
-// tree_rotations
+	/*-----------
+		ROTATE
+	-----------*/
 
 			void	_right_rotate(node_ptr node) {
 				node_ptr tmp = node->left;
@@ -500,7 +510,9 @@ namespace ft {
 				node->parent = tmp;
 			}
 
-// insert utils
+	/*-----------
+		INSERT
+	-----------*/
 
 			void	_fix_insert(node_ptr node) {
 				node_ptr uncle;
@@ -542,7 +554,9 @@ namespace ft {
 				this->_root->color = BLACK;
 			}
 
-// erase utils
+	/*-----------
+		ERASE
+	-----------*/
 
 			void	_fix_erase(node_ptr x) {
 				node_ptr w;
@@ -618,7 +632,9 @@ namespace ft {
 				this->_delete_node(node);
 			}
 
-// search
+	/*-----------
+		SEARCH
+	-----------*/
 
 			node_ptr	_search(value_type value) const {
 				node_ptr current = this->_root;
@@ -633,7 +649,9 @@ namespace ft {
 				return (current);
 			}
 
-// node creation / deletion
+	/*----------------------
+		CREATE/DELETE NODE
+	----------------------*/
 
 			node_ptr	_new_node(value_type val = value_type()) {
 				node_ptr new_node = this->_alloc.allocate(1);
@@ -647,7 +665,9 @@ namespace ft {
 					this->_alloc.deallocate(node, 1);
 			}
 
-// debug utils
+	/*-----------
+		PRINT
+	-----------*/
 
 			void	print(void) {
 				std::stringstream buffer;

@@ -18,20 +18,6 @@ namespace ft {
 	{
 		this->create(n, value);
 	}
-	
-	/*template <typename T, typename Allocator> template <class iterator>
-	vector<T, Allocator>::vector(iterator first, iterator last,const allocator_type& Alloc)
-	{
-		difference_type diff = last - first;
-		int i = 0;
-		this->_capacity = static_cast<size_type>(diff);
-		this->_size = static_cast<size_type>(diff);
-		this->_data = this->_alloc.allocate(this->_capacity);
-		while (first++ < last)
-			this->_alloc.construct(this->data[i++], *first);
-
-
-	}*/
 
 	template <typename T, typename Allocator> 
 	vector<T, Allocator>::vector(const vector<T,Allocator>& lhs)
@@ -58,23 +44,6 @@ namespace ft {
 			this->_alloc.construct(&this->_data[i], lhs[i]);
 		return *this;
 	}
-
-	/*template <class Iterator>
-	template <typename T, typename Allocator>
-	void vector<T, Allocator>::assign(Iterator first, Iterator last)
-	{
-		int i = 0;
-		if (last - first > this->_capacity)
-			this->reserve(last - first);
-		if (last - first > this->_size)
-			this->_size = last - first;
-		while (first < last)
-		{
-			this->_data[i] = *first;
-			first++;
-			i++; 
-		}
-	}*/
 
 	template <typename T, typename Allocator>
 	void vector<T, Allocator>::assign(size_type n, const T& u)
@@ -307,9 +276,6 @@ namespace ft {
 		this->_size = tmp;
 	}
 
-	/*template <class InputIterator>
-	void insert(iterator position,
-	InputIterator first, InputIterator last);*/
 	template <typename T, typename Allocator>
 	typename vector<T, Allocator>::iterator vector<T, Allocator>::erase(iterator position)
 	{
