@@ -1,99 +1,111 @@
-#ifndef RANDITERATOR_HPP
-# define RANDITERATOR_HPP
-# include "RandIterator_template.hpp"
+#ifndef RANDITERATOR_TEMPLATE_HPP
+#define RANDITERATOR_TEMPLATE_HPP
+# include <cstddef>
 
 namespace ft{
 	template<typename T>
-	RandIterator<T>::RandIterator(void) : _ptr(NULL) {}
-	template<typename T>
-	RandIterator<T>::RandIterator(T *src) : _ptr(src) {}
-	template<typename T>
-	RandIterator<T>::RandIterator(const RandIterator &src)
-	{
-		*this = src;
-	}
-	template<typename T>
-	RandIterator<T>::~RandIterator(void) {}
-	template<typename T>
-	RandIterator<T>	& RandIterator<T>::operator=(RandIterator const &rhs)
-	{
-		if (this == &rhs)
+	class RandIterator{
+		public:
+			typedef T  value_type;
+			typedef ptrdiff_t  difference_type;
+
+	
+		RandIterator(void) : _ptr(NULL) {}
+		
+		RandIterator(T *src) : _ptr(src) {}
+		
+		RandIterator(const RandIterator &src)
+		{
+			*this = src;
+		}
+		
+		~RandIterator(void) {}
+		
+		RandIterator<T>	& operator=(RandIterator const &rhs)
+		{
+			if (this == &rhs)
+				return (*this);
+			this->_ptr = rhs._ptr;
 			return (*this);
-		this->_ptr = rhs._ptr;
-		return (*this);
-	}
+		}
 
-	template<typename T>
-	bool	RandIterator<T>::operator==(const RandIterator &rhs) const
-	{
-		return (this->_ptr == rhs._ptr);
-	}
-	template<typename T>
-	bool	RandIterator<T>::operator!=(const RandIterator &rhs) const
-	{
-		return (this->_ptr != rhs._ptr);
-	}
-	template<typename T>
-	bool	RandIterator<T>::operator<(const RandIterator &rhs) const
-	{
-		return (this->_ptr < rhs._ptr);
-	}
-	template<typename T>
-	bool	RandIterator<T>::operator<=(const RandIterator &rhs) const
-	{
-		return (this->_ptr <= rhs._ptr);
-	}
-	template<typename T>
-	bool	RandIterator<T>::operator>(const RandIterator &rhs) const
-	{
-		return (this->_ptr > rhs._ptr);
-	}
-	template<typename T>
-	bool	RandIterator<T>::operator>=(const RandIterator &rhs) const
-	{
-		return (this->_ptr >= rhs._ptr);
-	}
+		
+		bool	operator==(const RandIterator &rhs) const
+		{
+			return (this->_ptr == rhs._ptr);
+		}
+		
+		bool	operator!=(const RandIterator &rhs) const
+		{
+			return (this->_ptr != rhs._ptr);
+		}
+		
+		bool	operator<(const RandIterator &rhs) const
+		{
+			return (this->_ptr < rhs._ptr);
+		}
+		
+		bool	operator<=(const RandIterator &rhs) const
+		{
+			return (this->_ptr <= rhs._ptr);
+		}
+		
+		bool	operator>(const RandIterator &rhs) const
+		{
+			return (this->_ptr > rhs._ptr);
+		}
+		
+		bool	operator>=(const RandIterator &rhs) const
+		{
+			return (this->_ptr >= rhs._ptr);
+		}
 
-	template<typename T>
-	RandIterator<T>	&RandIterator<T>::operator++(void)
-	{
-		this->_ptr++;
-		return (*this);
-	}
-	template<typename T>
-	RandIterator<T>	RandIterator<T>::operator++(int)
-	{
-		RandIterator<T> tmp = *this;
-		++(*this);
-		return (tmp);
-	}
-	template<typename T>
-	RandIterator<T>	&RandIterator<T>::operator--(void)
-	{
-		this->_ptr;
-		return (*this);
-	}
-	template<typename T>
-	RandIterator<T>	RandIterator<T>::operator--(int)
-	{
-		RandIterator<T> tmp = (*this);
-		this->_ptr++;
-		return (tmp);
-	}
-	template<typename T>
-	typename RandIterator<T>::difference_type	RandIterator<T>::operator-(const RandIterator &rhs) const
-	{
-		return (this->_ptr - rhs._ptr);
-	}
-	template<typename T>
-	RandIterator<T>			RandIterator<T>::operator+(difference_type n) const
-	{
-		return (RandIterator(this->_ptr + n));
-	}
-	template<typename T>
-	RandIterator<T>			RandIterator<T>::operator-(difference_type n) const
-	{
-		return (RandIterator(this->_ptr - n));
-	}
-}//end ft
+		
+		RandIterator<T>	&operator++(void)
+		{
+			this->_ptr++;
+			return (*this);
+		}
+		
+		RandIterator<T>	operator++(int)
+		{
+			RandIterator<T> tmp = *this;
+			++(*this);
+			return (tmp);
+		}
+		
+		RandIterator<T>	&operator--(void)
+		{
+			this->_ptr;
+			return (*this);
+		}
+		
+		RandIterator<T>	operator--(int)
+		{
+			RandIterator<T> tmp = (*this);
+			this->_ptr++;
+			return (tmp);
+		}
+		
+		difference_type	operator-(const RandIterator &rhs) const
+		{
+			return (this->_ptr - rhs._ptr);
+		}
+		
+		RandIterator<T>			operator+(difference_type n) const
+		{
+			return (RandIterator(this->_ptr + n));
+		}
+		
+		RandIterator<T>			operator-(difference_type n) const
+		{
+			return (RandIterator(this->_ptr - n));
+		}
+				friend RandIterator<T>	operator+(difference_type n, const RandIterator &rhs)
+					{ return rhs.operator+(n); };
+
+		protected:
+			T *_ptr; 
+	};//end RandIterator class
+}//end namespace
 #endif

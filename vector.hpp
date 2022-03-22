@@ -188,6 +188,8 @@ namespace ft {
 				throw std::out_of_range("Out of range");
 			return (this->_data[n]);
 		}
+		else
+			throw std::out_of_range("Out of range");
 	}
 	template <typename T, typename Allocator> typename vector<T, Allocator>::
 	reference vector<T, Allocator>::at(size_type n)
@@ -198,6 +200,8 @@ namespace ft {
 				throw std::out_of_range("Out of range");
 			return (this->_data[n]);
 		}
+		else
+			throw std::out_of_range("Out of range");
 	}
 	template <typename T, typename Allocator> typename vector<T, Allocator>::
 	reference vector<T, Allocator>::front()
