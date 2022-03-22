@@ -1,7 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include <type_traits>
+//#include <type_traits>
 	/*-----------------
 		ITERATOR_TRAITS	
 	------------------*/
@@ -49,7 +49,9 @@ namespace ft{
 		/*---------------
 			IS_INTEGRAL
 		----------------*/
-	template<typename> struct is_integral: std::false_type {};
+		/*
+	template<typename>
+	struct is_integral: std::false_type {};
 	template <>			 struct is_integral<bool> : public std::true_type {};
 	template <>			 struct is_integral<char> : public std::true_type {};
 	template <>			 struct is_integral<char16_t> : public std::true_type {};
@@ -65,7 +67,30 @@ namespace ft{
 	template <>			 struct is_integral<unsigned int> : public std::true_type {};
 	template <>			 struct is_integral<unsigned long int> : public std::true_type {};
 	template <>			 struct is_integral<unsigned long long int> : public std::true_type {};
+*/
+	# define IS_INTEGRAL(x) template <>\
+	struct is_integral<x> {\
+		static bool const value = true;\
+	}
 
+	template <typename T>
+	struct is_integral {
+		static bool const value = false;
+	};
+
+	IS_INTEGRAL(bool);
+	IS_INTEGRAL(char);
+	IS_INTEGRAL(wchar_t);
+	IS_INTEGRAL(signed char);
+	IS_INTEGRAL(short int);
+	IS_INTEGRAL(int);
+	IS_INTEGRAL(long int);
+	IS_INTEGRAL(unsigned char);
+	IS_INTEGRAL(unsigned short int);
+	IS_INTEGRAL(unsigned int);
+	IS_INTEGRAL(unsigned long int);
+
+	# undef IS_INTEGRAL
 		/*---------------
 			EQUAL COMPARE
 		----------------*/

@@ -1,27 +1,50 @@
 #include <iostream>
-#include <utility>
+//#include <utility>
 #include "Vector.hpp"
 //#include <map>
 #include "RBT.hpp"
-//#include "Map.hpp"
-
-using namespace std;
+#include "Map.hpp"
+#define TESTED_NAMESPACE ft
+//using namespace std;
 
 
 int main() {
-  ft::RedBlackTree bst;
-  bst.insert(55);
-  bst.insert(40);
-  bst.insert(65);
-  bst.insert(60);
-  bst.insert(75);
-  bst.insert(57);
-
-  bst.printTree();
-  cout << endl
-     << "After deleting" << endl;
-  bst.deleteNode(40);
-  bst.printTree();
+	ft::map<int, int> first;
+	ft::pair<ft::map<int, int>::iterator, bool> p;
+	for (int i = 0; i < 10; ++i) {
+		p = first.insert(ft::make_pair<int, int>(i, 10 - i));
+		std::cout << p.first->first << " " << p.first->second << " " << p.second << std::endl;
+	}
+		std::cout << first.size() << std::endl;
+		TESTED_NAMESPACE::map<int, int> second(first.begin(), first.end());
+		second[645] = 42;
+		std::cout << first.size() << std::endl;
+		second[845] = 45;
+		second[16584] = 12;
+		second[43] = 142;
+		std::cout << first.size() << std::endl;
+		second[56] = 144;
+		second[84] = 111;
+		std::cout << first.size() << std::endl;
+		TESTED_NAMESPACE::map<int, int> third(second);
+		std::cout << third.max_size() << std::endl;
+		TESTED_NAMESPACE::map<int, int> const fourth = third;
+		TESTED_NAMESPACE::map<int, int> fifth;
+		TESTED_NAMESPACE::map<int, int> sixth;
+		third.insert(first.begin(), first.end());
+		TESTED_NAMESPACE::map<int, int>::iterator it;
+		TESTED_NAMESPACE::map<int, int>::iterator _it;
+		for (it = third.begin(); it != third.end(); it++) {
+			_it = fifth.insert(third.begin(), TESTED_NAMESPACE::make_pair<int, int>(it->first * 2, it->second * 4));
+			std::cout << it->first << " " << it->second << std::endl;
+		}
+		for (int i = 0; i < 10; ++i) {
+			p = first.insert(TESTED_NAMESPACE::make_pair<int, int>(i, 10 - i));
+			std::cout << p.first->first << " " << p.first->second << " " << p.second << std::endl;
+		}
+		std::cout << sixth.size() << std::endl;
+		sixth.insert(fifth.begin(), fifth.end());
+		std::cout << sixth.size() << std::endl;
 }
 
 
