@@ -39,12 +39,21 @@ namespace ft{
 		/*---------------
 			ENABLE_IF
 		----------------*/
+	template <bool B, typename T = void>
+	struct enable_if {
+	};
 
-	template < bool Cond, class T = void >
+	template <typename T>
+	struct enable_if<true, T> {
+		typedef T type;
+	};
+
+
+	/*template < bool Cond, class T = void >
 	struct enable_if {};
 
 	template < class T >
-	struct enable_if<true, T> { typedef T type; };
+	struct enable_if<true, T> { typedef T type; };*/
 
 		/*---------------
 			IS_INTEGRAL
@@ -264,5 +273,17 @@ namespace ft{
 		template <typename T>
 		operator T*() { return static_cast<T*>(0); }
 	};
+
+	template <class Ite>
+	size_t	itlen(Ite first, Ite last) {
+		size_t	i = 0;
+
+		while (first != last)
+		{
+			++first;
+			++i;
+		}
+		return (i);
+	}
 }//end namespace
 #endif

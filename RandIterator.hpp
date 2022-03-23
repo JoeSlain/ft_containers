@@ -76,7 +76,7 @@ namespace ft{
 		
 		RandIterator<T>	&operator--(void)
 		{
-			this->_ptr;
+			this->_ptr--;
 			return (*this);
 		}
 		
