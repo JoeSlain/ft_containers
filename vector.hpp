@@ -28,6 +28,9 @@ class vector {
 	typedef ptrdiff_t									difference_type;
 	typedef size_t										size_type;
 	
+	/*--------------
+		ITERATOR
+	--------------*/
 	class iterator : public RandIterator<value_type> {
 		protected:
 		typedef RandIterator<value_type> base;
@@ -43,23 +46,14 @@ class vector {
 		typedef value_type*			pointer;
 		typedef std::random_access_iterator_tag iterator_category;
 
-	/*--------------
-		OPERATORS
-	--------------*/
 	reference			operator*(void) const
-	{
-		return (*this->_ptr);
-	}
+	{return (*this->_ptr);}
 
-	
 	pointer				operator->(void) const
-	{
-		return (this->_ptr);
-	}
+	{return (this->_ptr);}
 	
 	iterator			&operator+=(difference_type n)
-	{
-		this->_ptr += n;
+	{	this->_ptr += n;
 		return (*this);
 	}
 	
@@ -70,9 +64,7 @@ class vector {
 	}
 	
 	reference			operator[](difference_type n) const
-	{
-		return (this->_ptr[n]);
-	}
+	{ return (this->_ptr[n]);}
 
 		difference_type		operator-(const RandIterator<value_type> &n) const { return base::operator-(n); };
 		iterator			operator-(difference_type n) const { return base::operator-(n); };
@@ -87,6 +79,9 @@ class vector {
 		friend class vector;
 	};
 
+	/*--------------
+		CONST ITE
+	--------------*/
 	class const_iterator : public RandIterator<value_type> {
 	protected:
 	typedef RandIterator<value_type> base;
@@ -111,8 +106,8 @@ class vector {
 	{
 		return this->_ptr;
 	}
-	const_iterator			&operator+=(difference_type n);
-	const_iterator			&operator-=(difference_type n);
+	const_iterator			&operator+=(difference_type n) {*this->_ptr += n; return *this;}
+	const_iterator			&operator-=(difference_type n) {{*this->_ptr -= n; return *this;}}
 	reference			operator[](difference_type n) const;
 
 	difference_type		operator-(const RandIterator<value_type> &n) const { return base::operator-(n); };
@@ -390,28 +385,21 @@ class vector {
 	}
 
 	
-	iterator erase(iterator first, iterator last)
-	{
-		if (!(last - first))
-			return last;
-		T *newArray = this->_alloc.allocate(this->_size - (last - first));
-		int s = this->_size - (last - first);
-		int i = 0;
-		iterator start = this->begin();
-		iterator end = this->end();
+	iterator	erase(iterator first, iterator last) {
+	iterator tmp = first;
+	iterator end = this->end();
+	size_type deleted = ft::itlen(first, last);
 
-		while (start != first)
-			newArray[i++] = *start++;
-		iterator tmp = start;
-		start += last - first;
-		while (start != end)
-			newArray[i++] = *start++;
-		this->destroy();
-		this->_size = s;
-		this->_capacity = s;
-		this->_data = newArray;
-		return tmp;
+	while (last != end)
+	{
+		*first = *last;
+		++first;
+		++last;
 	}
+	while (deleted-- > 0)
+		this->_alloc.destroy(&this->_data[--this->_size]);
+	return (tmp);
+}
 	
 	
 	void swap( vector<T,Allocator>& lhs, vector<T,Allocator>& rhs )
@@ -442,6 +430,18 @@ class vector {
 			*position++ = *first++;
 	}
 
+
+
+	void	swap(vector &x) {
+		vector<T, allocator_type> tmp;
+
+		tmp._cpy_content(x);
+		
+		x._cpy_content(*this);
+		
+		this->_cpy_content(tmp);
+		
+	}
 	private:
 	value_type	*_data; //the array
 	size_type	_size;	// the actual occupied space in array
@@ -496,69 +496,53 @@ class vector {
 		this->_capacity = 0;
 		this->_data = NULL;
 	}
+
+
 };//---------------------------------------- END OF VECTOR CLASS 
 
 	/*--------------
 		OPERATORS √
 	--------------*/
-	template <typename T, typename Allocator>
-	bool operator==(const vector<T,Allocator>& lhs,const vector<T,Allocator>& rhs)
-	{
-		if (lhs._size != rhs._size)
-			return false;
-		for (int i =0; i < lhs._size; i++)
-		{
-			if (lhs._data[i] != rhs._data[i])
-				return false;
-		}
-		return true;
-	}
-	
-	template <typename T, typename Allocator>
-	bool operator< (const vector<T,Allocator>& lhs,
-	const vector<T,Allocator>& rhs)
-	{
-		return (lhs < rhs);
-	}
-	
-	template <typename T, typename Allocator>
-	bool operator!=(const vector<T,Allocator>& lhs,
-	const vector<T,Allocator>& rhs)
-	{
-		if (lhs._size != rhs._size)
-			return true;
-		for (int i =0; i < lhs._size; i++)
-		{
-			if (lhs._data[i] != rhs._data[i])
-				return true;
-		}
+template <class T, class Alloc>
+bool	operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	if (lhs.size() != rhs.size())
 		return false;
-	}
-	
-	template <typename T, typename Allocator>
-	bool operator> (const vector<T,Allocator>& lhs,
-	const vector<T,Allocator>& rhs)
-	{
-		return (lhs > rhs);
-	}
-	
-	template <typename T, typename Allocator>
-	bool operator>=(const vector<T,Allocator>& lhs,
-	const vector<T,Allocator>& rhs)
-	{
-		return (lhs >= rhs);
-	}
-	
-	template <typename T, typename Allocator>
-	bool operator<=(const vector<T,Allocator>& lhs, const vector<T,Allocator>& rhs)
-	{
-		return (lhs <= rhs);
-	}
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
+
+template <class T, class Alloc>
+bool	operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	return !(lhs == rhs);
+}
+
+template <class T, class Alloc>
+bool	operator< (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <class T, class Alloc>
+bool	operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	return !(rhs < lhs);
+}
+
+template <class T, class Alloc>
+bool	operator> (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	return (rhs < lhs);
+}
+
+template <class T, class Alloc>
+bool	operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+	return !(lhs < rhs);
+}
+
 /*---------------------
 	SPECIALIZED ALGOS
 ----------------------*/
 template <class T, class Allocator>
-void swap(vector<T,Allocator>& x, vector<T,Allocator>& y);
+void swap(vector<T,Allocator>& x, vector<T,Allocator>& y)
+{
+	x.swap(y) ;
+}
 
 }//----------------------------------------- END OF NAMESPACE
 
