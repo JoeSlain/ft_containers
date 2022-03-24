@@ -92,9 +92,9 @@ class vector {
 	typedef RandIterator<value_type> base;
 	const_iterator(value_type *src) : RandIterator<value_type>(src) {};
 	private:
-	const_iterator(const RandIterator<value_type> &src) : RandIterator<value_type>(src) {};
 
 	public:
+	const_iterator(const RandIterator<value_type> &src) : RandIterator<value_type>(src) {};
 	const_iterator(void) : RandIterator<value_type>() {};
 	const_iterator(const const_iterator &src) : RandIterator<value_type>(src) {};
 
@@ -107,7 +107,10 @@ class vector {
 		return *this->_ptr;
 	}
 
-	pointer				operator->(void) const;
+	pointer				operator->(void) const
+	{
+		return this->_ptr;
+	}
 	const_iterator			&operator+=(difference_type n);
 	const_iterator			&operator-=(difference_type n);
 	reference			operator[](difference_type n) const;
@@ -148,39 +151,27 @@ class vector {
 		this->create(ft::itlen(first, last), first, last);
 	}
 
-	/*template <class iterator>
-	vector(iterator first, iterator last, const allocator_type& Alloc = allocator_type())
-	{
-		difference_type diff = last - first;
-		int i = 0;
-		this->_capacity = static_cast<size_type>(diff);
-		this->_size = static_cast<size_type>(diff);
-		this->_alloc = Alloc;
-		this->_data = this->_alloc.allocate(this->_capacity);
-		while (first < last)
-		{
-			this->_alloc.construct(&this->_data[i++], *first);
-			first++;
-		}
-	}*/
 
-	vector(const vector<T,Allocator>& x) : _data(NULL), _size(0), _capacity(0), _alloc(x._alloc)
-	{this->assign(x.begin(), x.end());}
+
+	
+	vector(vector const &src) : \
+	_data(NULL), _size(0), _capacity(0), _alloc(allocator_type()) {
+	*this = src;
+	}
 
 	~vector() {this->destroy();}
 
-	vector<T,Allocator>& operator=(const vector<T,Allocator>& lhs)
-	{
-		if (this == &lhs)
-			return *this;
-		this->clear();
-		difference_type n = lhs.size();
-		if ( (long unsigned int)n > this->capacity())
-			this->reserve( n );
-		for (int i = 0; i < n; i++)
-			this->_alloc.construct(&this->_data[i], lhs[i]);
-		return *this;
+	vector<T, allocator_type>	&operator=(vector const &rhs) {
+		if (this == &rhs)
+			return (*this);
+		const_iterator first = rhs.begin();
+		const_iterator last = rhs.end();
+		size_type len = ft::itlen(first, last);
+		this->create((len > this->_capacity) ? len : this->_capacity, first, last);
+		return (*this);
 	}
+
+
 
 	template <typename InputIterator>
 	void	assign(InputIterator first, InputIterator last) {

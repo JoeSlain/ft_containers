@@ -29,7 +29,9 @@ namespace ft{
 			return (*this);
 		}
 
-		
+
+
+
 		bool	operator==(const RandIterator &rhs) const
 		{
 			return (this->_ptr == rhs._ptr);
