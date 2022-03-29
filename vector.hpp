@@ -322,44 +322,28 @@ class vector {
 		this->_alloc.destroy(&this->_data[--this->_size]);
 	}
 	
-	iterator insert(iterator position, const T& lhs)
-	{
-		T *newArray = this->_alloc.allocate(this->_size + 1);
-		int i = 0;
-		int tmp = this->_size + 1;
-		iterator it = this->begin();
-		iterator end = this->end();
-		while (it != position)
-			newArray[i++] = *it++;
-		newArray[i++] = lhs;
-		while (it != end)
-			newArray[i++] = *it++;
-		position--;
-		this->destroy();
-		this->_data = newArray;
-		this->_capacity = tmp;
-		this->_size = tmp;
-		return position;
-		
+	iterator	insert(iterator position, const value_type &val) {
+		difference_type idx = position - this->begin();
+
+		this->insert(position, 1, val);
+		return (iterator(this->begin() + idx));
 	}
+
 	
-	void insert(iterator position, size_type n, const T& lhs)
-	{
-		T *newArray = this->_alloc.allocate(this->_size + n);
-		int i = 0;
-		int tmp = this->_size + n;
-		iterator it = this->begin();
-		iterator end = this->end();
-		while (it != position)
-			newArray[i++] = *it++;
-		while (n--)
-			newArray[i++] = lhs;
-		while (it != end)
-			newArray[i++] = *it++;
-		this->destroy();
-		this->_data = newArray;
-		this->_capacity = tmp;
-		this->_size = tmp;
+	void	insert(iterator position, size_type n, const value_type &val) {
+		difference_type const	idx = position - this->begin();
+		difference_type const	old_end_idx = this->end() - this->begin();
+		iterator				old_end, end;
+
+		this->resize(this->_size + n);
+
+		end = this->end();
+		position = this->begin() + idx;
+		old_end = this->begin() + old_end_idx;
+		while (old_end != position)
+			*--end = *--old_end;
+		while (n-- > 0)
+			*position++ = val;
 	}
 
 	
