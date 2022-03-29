@@ -5,6 +5,7 @@
 # include <limits>
 # include <iterator>
 # include "RandIterator.hpp"
+#include "Reverse_iterator.hpp"
 # include "utils.hpp"
 
 namespace ft
@@ -31,6 +32,7 @@ class vector {
 	/*--------------
 		ITERATOR
 	--------------*/
+	/*
 	class iterator : public RandIterator<value_type> {
 		protected:
 		typedef RandIterator<value_type> base;
@@ -78,7 +80,40 @@ class vector {
 
 		friend class vector;
 	};
+*/
 
+	class iterator : public RandIterator<value_type> {
+		protected:
+		typedef RandIterator<value_type> super;
+		iterator(value_type *src) : RandIterator<value_type>(src) {};
+		private:
+		iterator(const RandIterator<value_type> &src) : RandIterator<value_type>(src) {};
+
+		public:
+		iterator(void) : RandIterator<value_type>() {};
+		iterator(const iterator &src) : RandIterator<value_type>(src) {};
+
+		typedef value_type&			reference;
+		typedef value_type*			pointer;
+
+		reference			operator*(void) const;
+		pointer				operator->(void) const;
+		iterator			&operator+=(difference_type n);
+		iterator			&operator-=(difference_type n);
+		reference			operator[](difference_type n) const;
+
+		difference_type		operator-(const RandIterator<value_type> &n) const { return super::operator-(n); };
+		iterator			operator-(difference_type n) const { return super::operator-(n); };
+		iterator			operator+(difference_type n) const { return super::operator+(n); };
+		friend iterator		operator+(difference_type n, const iterator &rhs) { return rhs.operator+(n); };
+
+		iterator			&operator++(void) { super::operator++(); return *this; };
+		iterator			operator++(int) { return super::operator++(0); };
+		iterator			&operator--(void) { super::operator--(); return *this; };
+		iterator			operator--(int) { return super::operator--(0); };
+
+		friend class vector;
+	};
 	/*--------------
 		CONST ITE
 	--------------*/
@@ -127,8 +162,8 @@ class vector {
 		VECTOR
 	--------------*/
 
-	typedef std::reverse_iterator<iterator> 		reverse_iterator;
-	typedef std::reverse_iterator<const_iterator> 	const_reverse_iterator;
+	typedef ft::reverse_iterator<iterator> 		reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator> 	const_reverse_iterator;
 
 	/*----------------
 		CONSTRUCTORS
