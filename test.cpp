@@ -1,9 +1,9 @@
 #include <iostream>
 //#include <utility>
-#include "Vector.hpp"
+#include "vector.hpp"
 //#include <map>
 #include "RBT.hpp"
-#include "Map.hpp"
+#include "map.hpp"
 #define TESTED_NAMESPACE ft
 //using namespace std;
 
