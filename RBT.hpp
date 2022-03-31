@@ -178,6 +178,8 @@ namespace ft {
 				return (node);
 			}
 
+			/* Si node right alors on return min du node de droite
+				else on remonte les parents de l'arbre */
 			node_ptr	_next(node_ptr node) {
 				if (node->right != this->_nil)
 					return (this->_min(node->right));
@@ -614,6 +616,7 @@ namespace ft {
 				x->color = BLACK;
 			}
 
+			/* Connects node to to_cut's parent */
 			void	_transplant(node_ptr to_cut, node_ptr to_connect) {
 				if (to_cut->parent == this->_nil)
 					this->_root = to_connect;
