@@ -48,35 +48,9 @@ namespace ft{
 		typedef T type;
 	};
 
-
-	/*template < bool Cond, class T = void >
-	struct enable_if {};
-
-	template < class T >
-	struct enable_if<true, T> { typedef T type; };*/
-
 		/*---------------
 			IS_INTEGRAL
 		----------------*/
-		/*
-	template<typename>
-	struct is_integral: std::false_type {};
-	template <>			 struct is_integral<bool> : public std::true_type {};
-	template <>			 struct is_integral<char> : public std::true_type {};
-	template <>			 struct is_integral<char16_t> : public std::true_type {};
-	template <>			 struct is_integral<char32_t> : public std::true_type {};
-	template <>			 struct is_integral<wchar_t> : public std::true_type {};
-	template <>			 struct is_integral<signed char> : public std::true_type {};
-	template <>			 struct is_integral<short int> : public std::true_type {};
-	template <>			 struct is_integral<int> : public std::true_type {};
-	template <>			 struct is_integral<long int> : public std::true_type {};
-	template <>			 struct is_integral<long long int> : public std::true_type {};
-	template <>			 struct is_integral<unsigned char> : public std::true_type {};
-	template <>			 struct is_integral<unsigned short int> : public std::true_type {};
-	template <>			 struct is_integral<unsigned int> : public std::true_type {};
-	template <>			 struct is_integral<unsigned long int> : public std::true_type {};
-	template <>			 struct is_integral<unsigned long long int> : public std::true_type {};
-*/
 	# define IS_INTEGRAL(x) template <>\
 	struct is_integral<x> {\
 		static bool const value = true;\
@@ -158,19 +132,12 @@ namespace ft{
 	------------*/
 	template < class T1, class T2 >
 	struct pair {
-	/* member functions */
 	
 		typedef T1	first_type;
 		typedef T2	second_type;
-
-	/* member variables */
 	
 		first_type	first;
 		second_type second;
-
-	/* member functions */
-	
-	/* constructor / destructor / operator= */
 		
 		/**
 		 * @brief constructor: default
@@ -210,7 +177,6 @@ namespace ft{
 		 * @param pr: another par object.
 		 * @return *this
 		 */
-		// implicitly declared:
 		pair& operator= (const pair & pr) {
 			if (this == &pr) return *this;
 
