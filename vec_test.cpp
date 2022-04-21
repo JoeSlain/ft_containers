@@ -1,53 +1,19 @@
 #include <iostream>
-//#include <utility>
-#include "vector.hpp"
-//#include <map>
+#include <map>
 #include "RBT.hpp"
-#include "Map.hpp"
-#define NS ft
-//using namespace std;
-
-
-#include "containers_test/srcs/vector/common.hpp"
-
+#include "map.hpp"
+#define NS std
 #define TESTED_TYPE int
 
 int		main(void)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_two(4);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_three;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_four;
+	NS::map<TESTED_TYPE, TESTED_TYPE> mp;
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 3;
-	for (unsigned long int i = 0; i < vct_two.size(); ++i)
-		vct_two[i] = (vct_two.size() - i) * 5;
-	printSize(vct);
-	printSize(vct_two);
+	for (unsigned long int i = 0; i < 100000; ++i)
+		mp.insert(NS::make_pair(i, i*10));
+	NS::map<TESTED_TYPE, TESTED_TYPE>::iterator it = mp.find(5000);
+	std::cout << it->first << " " << it->second << std::endl;
 
-	vct_three.assign(vct.begin(), vct.end());
-	vct.assign(vct_two.begin(), vct_two.end());
-	vct_two.assign(2, 42);
-	vct_four.assign(4, 21);
-
-	std::cout << "\t### After assign(): ###" << std::endl;
-
-	printSize(vct);
-	printSize(vct_two);
-	printSize(vct_three);
-	printSize(vct_four);
-
-	vct_four.assign(6, 84);
-	printSize(vct_four);
-
-	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
-
-	vct.assign(5, 53);
-	vct_two.assign(vct_three.begin(), vct_three.begin() + 3);
-
-	printSize(vct);
-	printSize(vct_two);
 
 	return (0);
 }

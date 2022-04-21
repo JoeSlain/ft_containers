@@ -9,10 +9,10 @@
 
 
 int main() {
-	ft::map<int, int> first;
-	ft::pair<ft::map<int, int>::iterator, bool> p;
+	TESTED_NAMESPACE::map<int, int> first;
+	TESTED_NAMESPACE::pair<TESTED_NAMESPACE::map<int, int>::iterator, bool> p;
 	for (int i = 0; i < 10; ++i) {
-		p = first.insert(ft::make_pair<int, int>(i, 10 - i));
+		p = first.insert(TESTED_NAMESPACE::make_pair<int, int>(i, 10 - i));
 		std::cout << p.first->first << " " << p.first->second << " " << p.second << std::endl;
 	}
 		std::cout << first.size() << std::endl;
